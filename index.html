@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Gửi em 💌</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body
+   
+  {  overflow: hidden;
+    color: white;
+}
+#hearts {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.heart {
+  position: absolute;
+  bottom: 0;
+  color: #ff4d6d;
+  font-size: 20px;
+  animation: floatUp 4s linear forwards, sway 2s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+/* VIDEO BACKGROUND */
+#bgVideo {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    filter: brightness(0.5);
+}
+
+/* OVERLAY */
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+}
+
+/* PAGE */
+.page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 1s ease;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* TEXT */
+h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px #ff4d6d;
+}
+
+p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+/* BUTTON */
+button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    margin: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.yes {
+    background: #ff4d6d;
+    color: white;
+}
+
+.no {
+    background: white;
+}
+
+/* STORY */
+#storyText {
+    max-width: 600px;
+    text-align: center;
+    line-height: 1.8;
+    font-size: 18px;
+}
+
+/* TYPE EFFECT */
+.char {
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- VIDEO -->
+<video id="bgVideo" autoplay loop playsinline muted>
+    <source src="video.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<!-- PAGE 1 -->
+<div class="page" id="page1">
+    <h1>Gửi em 💌</h1>
+    <p>Anh có một điều muốn nói với em...</p>
+
+    <button class="yes" onclick="dongY()">Đồng ý ❤️</button>
+    <button class="no" onmouseover="chay()">Không 😢</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page hidden" id="page2">
+    <div id="storyText"></div>
+</div>
+
+<script>
+
+/* TEXT */
+const text = `CHO TỚI BÂY GIỜ ANH KHÔNG NGHĨ RẰNG...
+EM LẠI LÀ MỘT NGƯỜI ĐẶC BIỆT CHO TỚI VẬY...
+EM LÀ MỘT NGƯỜI CON GÁI RẤT TUYỆT VỜI..
+ANH RẤT TIẾC NHỮNG CHUYỆN QUÁ KHỨ ĐÃ LÀM CHO ĐÔI TA KHÔNG THỂ Ở BÊN NHAU...
+NHƯNG NGAY GIỜ ĐÂY ANH ĐÃ SUY NGHĨ RẤT NHIỀU...
+MÌNH PHẢI MỞ LỜI VỚI CÔ ẤY NHƯ THẾ NÀO ĐÂY...?
+MÌNH SẼ ĐỐI XỬ VỚI CÔ ẤY NHƯ THẾ NÀO ĐÂY...?
+MÌNH SẼ NÓI NHỮNG GÌ VỚI CO ẤY NHỈ...?
+VÀ ANH ĐÃ QUYẾT ĐỊNH RỒI...
+LẦN NÀY ANH SẼ QUAY LẠI VÀ NÓI VỚI EM RẰNG....
+ANH YÊU EM RẤT NHIỀU...!
+ANH SẼ BÙ ĐẮP LẠI NHỮNG GÌ EM ĐÃ THẤT VỌNG Ở ANH TRONG QUÁ KHỨ...
+ANH SẼ CHĂM SÓC EM HẾT MÌNH...
+ANH SẼ LO CHO EM MỘT CUỘC SỐNG HẠNH PHÚC...
+MỘT CUỘC SỐNG MÀ EM XỨNG ĐÁNG ĐƯỢC NHẬN...
+VÀ SẼ LÀ MỘT PHIÊN BẢN HOÀN HẢO NHẤT CỦA ANH...
+SẼ KHÔNG BAO GIỜ LÀM EM PHẢI BUỒN NỮA...
+SẼ KHÔNG BAO GIỜ LÀM EM PHẢI KHÓC NỮA...
+SẼ KHÔNG BAO GIỜ LÀM EM PHẢI THẤT VỌNG NỮA...
+❤️ ANH YÊU EM RẤT NHIỀU... ❤️`;
+
+/* TYPE EFFECT */
+function typeEffect() {
+    const container = document.getElementById("storyText");
+    container.innerHTML = "";
+
+    let i = 0;
+
+    function addChar() {
+        if (i < text.length) {
+            let span = document.createElement("span");
+
+            if (text[i] === "\n") {
+                container.appendChild(document.createElement("br"));
+            } else {
+                span.innerText = text[i];
+                span.classList.add("char");
+                span.style.animationDelay = (i * 0.03) + "s";
+                container.appendChild(span);
+            }
+
+            i++;
+            setTimeout(addChar, 20);
+        }
+    }
+
+    addChar();
+}
+
+/* CLICK ĐỒNG Ý */
+function dongY() {
+    const video = document.getElementById("bgVideo");
+
+    video.muted = false; // bật tiếng
+
+    document.getElementById("page1").classList.add("hidden");
+    document.getElementById("page2").classList.remove("hidden");
+
+    typeEffect();
+}
+
+/* NÚT KHÔNG CHẠY */
+function chay() {
+    const btn = document.querySelector(".no");
+
+    let x = Math.random() * window.innerWidth;
+    let y = Math.random() * window.innerHeight;
+
+    btn.style.position = "absolute";
+    btn.style.left = x + "px";
+    btn.style.top = y + "px";
+}
+
+</script>
+
+</body>
+</html>
